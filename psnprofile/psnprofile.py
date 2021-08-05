@@ -107,7 +107,7 @@ class PsnProfile:
         profileGames = self.get_games()
         finalMsg = "**Rare Trophies**\n"
         finalMsg += rareTrophies + "\n"
-        finalMsg = "**Game Trophies**\n"
+        finalMsg += "**Game Trophies**\n"
         finalMsg += profileGames
         return finalMsg
 

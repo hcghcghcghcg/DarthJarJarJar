@@ -57,6 +57,7 @@ async def get_psnprofile(ctx, profileName: str):
     if ctx.author == client.user:
         return
     newProfile = PsnProfile(profileName)
+    newProfile.scrape_psnprofile()
     await ctx.channel.send(newProfile.get_profile())
 
 
