@@ -59,4 +59,4 @@ async def welcome(ctx):
 
 
 
-client.run('ODcyMTk0NzA3MTE0MDQ1NDQw.YQmUng.FOGJATWc8k-YilMDkPqF4eOL6uQ')
+client.run('TOKEN')
