@@ -102,6 +102,15 @@ class PsnProfile:
         for g in self.games:
             print(g)
 
+    def get_profile(self):
+        rareTrophies = self.get_rare_trophies()
+        profileGames = self.get_games()
+        finalMsg = "**Rare Trophies**\n"
+        finalMsg += rareTrophies + "\n"
+        finalMsg = "**Game Trophies**\n"
+        finalMsg += profileGames
+        return finalMsg
+
     def get_rare_trophies(self):
         finalMsg = ""
         for t in self.rare_trophies:
@@ -111,14 +120,7 @@ class PsnProfile:
     def get_games(self):
         finalMsg = ""
         for g in self.games:
-            finalMsg += str(t) + "\n"
+            finalMsg += str(g) + "\n"
         return finalMsg
     
-    def get_profile(self):
-        rareTrophies = get_rare_trophies()
-        profileGames = get_games()
-        finalMsg = "**Rare Trophies**\n"
-        finalMsg += rareTrophies + "\n"
-        finalMsg = "**Game Trophies**\n"
-        finalMsg += profileGames
-        return finalMsg
+    
