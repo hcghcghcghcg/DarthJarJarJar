@@ -52,13 +52,20 @@ async def welcome(ctx):
     await ctx.send("<:Wjin:865274048988184588><:Ejin:865274113174405131><:Ljin:865274170157432843><:Cjin:865274259353370634><:Ojin:865274346129850408><:Mjin:865274436168450058><:Ejin:865274113174405131>")
 
 # PSNProfile related bot stuff
-@bot.command(name='psnprofile', help="Grabs your profile data from Psnprofile")
+@client.command(name='psnprofile', help="Grabs your profile data from Psnprofile")
 async def get_psnprofile(ctx, profileName: str):
     if ctx.author == client.user:
         return
     newProfile = PsnProfile(profileName)
+    await ctx.channel.send("Please wait a moment...")
     newProfile.scrape_psnprofile()
-    await ctx.channel.send(newProfile.get_profile())
+    titleCard = profileName+"'s PSNProfile"
+    gameData, rareData = newProfile.get_profile()
+    newEmbed = discord.Embed(title=titleCard, url=newProfile.profile_url, description=gameData, color=0x2565c4)
+    await ctx.channel.send(embed=newEmbed)
+    
+    # await ctx.channel.send(gameData)
+    # await ctx.channel.send(rareData)
 
 
 
@@ -66,4 +73,4 @@ async def get_psnprofile(ctx, profileName: str):
 
 
 
-client.run('TOKEN')
+client.run('ODcyMTk0NzA3MTE0MDQ1NDQw.YQmUng.nONS7teqShfYUeAFJdam1mdt3lg')

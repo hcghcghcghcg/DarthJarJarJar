@@ -19,7 +19,7 @@ class Game:
         self.game_plat_rarity = game_plat_rarity
 
     def __str__(self):
-        return f"{self.game_name} ({self.game_console}) [{self.game_plat_rarity}] - {self.game_trophy_count} - Bronze({self.game_bronze}), Silver({self.game_silver}), Gold({self.game_gold})"
+        return f"{self.game_name} ({self.game_console}) [{self.game_plat_rarity}] - {self.game_trophy_count} - B({self.game_bronze}), S({self.game_silver}), G({self.game_gold})"
 
 class Trophy:
     '''
@@ -35,7 +35,7 @@ class Trophy:
         self.trophy_image_url = img_url
 
     def __str__(self):
-        return f"{self.trophy_game_name} Trophy - {self.trophy_name} ({self.trophy_percent} - {self.trophy_rarity}) [{self.trophy_type}]"
+        return f"{self.trophy_game_name} - {self.trophy_name} ({self.trophy_percent} - {self.trophy_rarity}) [{self.trophy_type}]"
 
 class PsnProfile:
     def __init__ (self, profile_name):
@@ -46,11 +46,14 @@ class PsnProfile:
         self.bronze_count = 0
         self.rare_trophies = []
         self.games = []
+        self.profile_url = f"https://psnprofiles.com/{self.profile_name}"
 
     def scrape_psnprofile(self):
         checkParam = re.search("[~!#$%^&*()_+{}:;\\']", self.profile_name)
         assert checkParam == None, "Input psn profile parameter is invalid."
-        browser = webdriver.Firefox(executable_path="C:\\Users\\Harith\\Documents\\Geckodriver\\geckodriver.exe")
+        foptions = webdriver.FirefoxOptions()
+        foptions.add_argument('-headless')
+        browser = webdriver.Firefox(executable_path="C:\\Users\\Harith\\Documents\\Geckodriver\\geckodriver.exe", options=foptions)
         browser.get(f"https://psnprofiles.com/{self.profile_name}")
         # Grabbing Rare Trophies
         rare_trophy_tr = browser.find_elements_by_xpath("/html/body/div[6]/div[3]/div/div[2]/div[2]/div[4]/table/tbody/tr")
@@ -64,13 +67,13 @@ class PsnProfile:
             trophyURL = tds[3].find_element_by_tag_name('span').find_element_by_tag_name('img').get_attribute('src')
             trophyType = None
             if "bronze" in trophyURL:
-                trophyType = "bronze"
+                trophyType = "B"
             elif "silver" in trophyURL:
-                trophyType = "silver"
+                trophyType = "S"
             elif "gold" in trophyURL:
-                trophyType = "gold"
+                trophyType = "G"
             elif "platinum" in trophyURL:
-                trophyType = "platinum"
+                trophyType = "P"
             rtrophy = Trophy(trophyName, trophyGameName, trophyType, trophyPercent, trophyRarity, trophyImgUrl)
             self.rare_trophies.append(rtrophy)
 
@@ -92,24 +95,26 @@ class PsnProfile:
 
     def dbg_rare_trophies(self):
         print("Rare Trophies")
-        print("---------------------")
+        print("--------------")
         for t in self.rare_trophies:
             print(t)
     
     def dbg_games(self):
         print("\nGames")
-        print("---------------------")
+        print("--------------")
         for g in self.games:
             print(g)
 
     def get_profile(self):
-        rareTrophies = self.get_rare_trophies()
+        rareTrophyData = self.get_rare_trophies()
         profileGames = self.get_games()
-        finalMsg = "**Rare Trophies**\n"
-        finalMsg += rareTrophies + "\n"
+        rareTrophies = ""
+        finalMsg = ""
+        rareTrophies += "**Rare Trophies**\n"
+        rareTrophies += rareTrophyData + "\n"
         finalMsg += "**Game Trophies**\n"
         finalMsg += profileGames
-        return finalMsg
+        return finalMsg, rareTrophies
 
     def get_rare_trophies(self):
         finalMsg = ""
