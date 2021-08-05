@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.utils import get
-
+from psnprofile.psnprofile import *
 
 
 intents = discord.Intents(messages = True, guilds = True, reactions = True, members = True, presences = True)
@@ -51,7 +51,13 @@ async def rule16(ctx):
 async def welcome(ctx):
     await ctx.send("<:Wjin:865274048988184588><:Ejin:865274113174405131><:Ljin:865274170157432843><:Cjin:865274259353370634><:Ojin:865274346129850408><:Mjin:865274436168450058><:Ejin:865274113174405131>")
 
-
+# PSNProfile related bot stuff
+@bot.command(name='psnprofile', help="Grabs your profile data from Psnprofile")
+async def get_psnprofile(ctx, profileName: str):
+    if ctx.author == client.user:
+        return
+    newProfile = PsnProfile(profileName)
+    await ctx.channel.send(newProfile.get_profile())
 
 
 
